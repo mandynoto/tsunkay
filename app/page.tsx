@@ -24,40 +24,61 @@ export default function Home() {
       parts: [{ text: userMessage }],
     };
 
-    const updatedHistory = [...history, newUserMessage];
-    setHistory(updatedHistory);
+    let messageHistory: ChatHistory = []; // Initialize
+
+    // Update client-side history with user message and AI placeholder
+    setHistory((prevHistory) => {
+      messageHistory = [...prevHistory, newUserMessage]; // This is the history to send to API
+      return [...messageHistory, { role: "model", parts: [{ text: "" }] }]; // Add AI placeholder for display
+    });
 
     try {
-      const response = await fetch("/api/chat/sendMessage", {
+      const response = await fetch("/api/chat/sendMessageStreamed", {
+        // Changed endpoint
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           userMessage: userMessage,
-          history: updatedHistory,
+          history: messageHistory, // Send the actual history, not the one with placeholder
           settings: settings,
         }),
       });
 
-      const data = await response.json();
-
-      if (data.error) {
-        console.error("AI Error:", data.error);
+      if (!response.body) {
+        console.error("Response body is null");
         return;
       }
 
-      const aiMessage: Message = {
-        role: "model" as MessageRole,
-        parts: [{ text: data.response }],
-      };
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+      let accumulatedResponse = "";
 
-      setHistory([...updatedHistory, aiMessage]);
+      while (!done) {
+        const { value, done: readerDone } = await reader.read();
+        done = readerDone;
+        const chunk = decoder.decode(value, { stream: true });
+        accumulatedResponse += chunk;
+
+        // Update the placeholder message in history
+        setHistory((prevHistory) => {
+          const newHistory = [...prevHistory];
+          const lastMessageIndex = newHistory.length - 1;
+          if (newHistory[lastMessageIndex].role === "model") {
+            // Ensure it's the AI placeholder
+            newHistory[lastMessageIndex] = {
+              ...newHistory[lastMessageIndex],
+              parts: [{ text: accumulatedResponse }],
+            };
+          }
+          return newHistory;
+        });
+      }
     } catch (error) {
       console.error("Request Failed:", error);
     }
-
-    console.log(userMessage);
   }
 
   return (

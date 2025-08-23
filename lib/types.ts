@@ -9,6 +9,10 @@ export interface Message {
   parts: MessagePart[];
 }
 
+export interface MessageWithId extends Message {
+  id: string;
+}
+
 // export interface ChatHistory extends Array<Message> {}
 export type ChatHistory = Message[];
 
