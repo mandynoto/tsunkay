@@ -24,7 +24,7 @@ body,
       transparent
     );
     background-size: 60px 60px;
-    @apply text-white px-4 py-2 rounded-lg transition-colors;
+    @apply text-white px-4 py-2 rounded-lg;
   }
 
   .btn-icon-primary {
@@ -41,7 +41,7 @@ body,
       transparent
     );
     background-size: 60px 60px;
-    @apply text-white p-2 rounded-full transition-colors;
+    @apply text-white p-2 rounded-full;
   }
 
   .btn-icon-disabled {
