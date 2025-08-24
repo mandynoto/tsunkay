@@ -1,3 +1,4 @@
+import EmptyMessageBubbleIndicator from "@/components/EmptyMessageBubbleIndicator";
 import { Message } from "@/lib/types";
 
 interface MessageBubbleProps {
@@ -6,20 +7,26 @@ interface MessageBubbleProps {
 
 export default function MessageBubble({ message }: MessageBubbleProps) {
   const isUser = message.role === "user";
+  const textContent = message.parts.map((part) => part.text).join("");
+  const hasContent = textContent.trim() !== "";
+
+  if (!hasContent) {
+    return isUser ? null : <EmptyMessageBubbleIndicator />;
+  }
 
   return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"} my-8`}>
-      <div
-        className={`rounded-2xl px-4 py-4 shadow-sm ${
-          isUser ? "bg-orange-100 text-black" : "bg-white text-gray-800"
-        } max-w-xs sm:max-w-md`}
+    <div
+      className={`w-full flex ${isUser ? "justify-end" : "justify-start"} my-8`}
+    >
+      <span
+        className={`
+        inline-block rounded-2xl px-4 py-4 shadow-sm break-words whitespace-pre-wrap
+        ${isUser ? "bg-orange-100 text-black" : "bg-white text-gray-800"}
+        max-w-full
+      `}
       >
-        <div className="break-words whitespace-pre-wrap">
-          {message.parts.map((part, idx) => (
-            <span key={idx}>{part.text}</span>
-          ))}
-        </div>
-      </div>
+        {textContent}
+      </span>
     </div>
   );
 }
