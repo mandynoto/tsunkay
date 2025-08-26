@@ -1,4 +1,3 @@
-import EmptyMessageBubbleIndicator from "@/components/EmptyMessageBubbleIndicator";
 import { Message } from "@/lib/types";
 
 interface MessageBubbleProps {
@@ -8,11 +7,7 @@ interface MessageBubbleProps {
 export default function MessageBubble({ message }: MessageBubbleProps) {
   const isUser = message.role === "user";
   const textContent = message.parts.map((part) => part.text).join("");
-  const hasContent = textContent.trim() !== "";
-
-  if (!hasContent) {
-    return isUser ? null : <EmptyMessageBubbleIndicator />;
-  }
+  const isAIThinking = !isUser && textContent.trim() === "";
 
   return (
     <div
@@ -21,11 +16,12 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
       <span
         className={`
         inline-block rounded-2xl px-4 py-4 shadow-sm break-words whitespace-pre-wrap
-        ${isUser ? "bg-orange-100 text-black" : "bg-white text-gray-800"}
-        max-w-full
+        ${
+          isUser ? "bg-orange-100 text-black" : "bg-white text-gray-800"
+        } max-w-full
       `}
       >
-        {textContent}
+        {isAIThinking ? "🤔" : textContent}
       </span>
     </div>
   );
