@@ -1,7 +1,6 @@
 "use client";
 
 import { Message, MessageRole } from "@/lib/types";
-import { useState } from "react";
 
 import { ChatHistory } from "@/lib/types";
 import ChatInput from "@/components/ChatInput";
@@ -9,6 +8,7 @@ import { ChatSettings } from "@/lib/types";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import MessageWindow from "@/components/MessageWindow";
+import { useState } from "react";
 import { useWelcomeMessage } from "@/lib/hooks/useWelcomeMessage";
 
 export default function Home() {
@@ -22,31 +22,29 @@ export default function Home() {
   const { stopTyping } = useWelcomeMessage(setHistory);
 
   async function handleSubmit(userMessage: string) {
-    stopTyping(); // Stop the welcome message typing
+    stopTyping();
 
     const newUserMessage: Message = {
       role: "user" as MessageRole,
       parts: [{ text: userMessage }],
     };
 
-    let messageHistory: ChatHistory = []; // Initialize
+    let messageHistory: ChatHistory = [];
 
-    // Update client-side history with user message and AI placeholder
     setHistory((prevHistory) => {
-      messageHistory = [...prevHistory, newUserMessage]; // This is the history to send to API
-      return [...messageHistory, { role: "model", parts: [{ text: "" }] }]; // Add AI placeholder for display
+      messageHistory = [...prevHistory, newUserMessage];
+      return [...messageHistory, { role: "model", parts: [{ text: "" }] }];
     });
 
     try {
       const response = await fetch("/api/chat/sendMessageStreamed", {
-        // Changed endpoint
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           userMessage: userMessage,
-          history: messageHistory, // Send the actual history, not the one with placeholder
+          history: messageHistory,
           settings: settings,
         }),
       });
@@ -67,12 +65,10 @@ export default function Home() {
         const chunk = decoder.decode(value, { stream: true });
         accumulatedResponse += chunk;
 
-        // Update the placeholder message in history
         setHistory((prevHistory) => {
           const newHistory = [...prevHistory];
           const lastMessageIndex = newHistory.length - 1;
           if (newHistory[lastMessageIndex].role === "model") {
-            // Ensure it's the AI placeholder
             newHistory[lastMessageIndex] = {
               ...newHistory[lastMessageIndex],
               parts: [{ text: accumulatedResponse }],
