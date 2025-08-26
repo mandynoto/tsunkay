@@ -1,15 +1,26 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { ChatHistory, Message } from "@/lib/types";
 
 const welcomeMessages = ["Hey 🙂", "Wyd 🙂", "Sup 🙂"];
 
 export function useWelcomeMessage(
   setHistory: (updater: (prevHistory: ChatHistory) => ChatHistory) => void
-) {
+): { stopTyping: () => void } {
+  const typingTimers = useRef<NodeJS.Timeout[]>([]);
+  const isTypingActive = useRef(true); // New flag
+
+  const stopTyping = useCallback(function () {
+    isTypingActive.current = false; // Set flag to false
+    typingTimers.current.forEach(clearTimeout);
+    typingTimers.current = [];
+  }, []);
+
   useEffect(
     function () {
+      isTypingActive.current = true; // Reset flag on mount
+
       const welcomeMessageObject: Message = {
         role: "model",
         parts: [{ text: "" }],
@@ -18,14 +29,16 @@ export function useWelcomeMessage(
         return [welcomeMessageObject];
       });
 
-      let typingTimer: NodeJS.Timeout;
-
       const initialDelayTimer = setTimeout(function () {
         const randomMessage =
           welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
         let index = 0;
 
         function typeCharacter() {
+          if (!isTypingActive.current) { // Check flag before continuing
+            return;
+          }
+
           if (index < randomMessage.length) {
             setHistory(function (prevHistory) {
               const newHistory = [...prevHistory];
@@ -38,19 +51,23 @@ export function useWelcomeMessage(
               return newHistory;
             });
             index++;
-            typingTimer = setTimeout(typeCharacter, 50);
+            const typingTimer = setTimeout(typeCharacter, 50);
+            typingTimers.current.push(typingTimer);
+          } else {
+            isTypingActive.current = false; // Typing finished naturally
           }
         }
         typeCharacter();
       }, 1100);
 
+      typingTimers.current.push(initialDelayTimer);
+
       return function () {
-        clearTimeout(initialDelayTimer);
-        if (typingTimer) {
-          clearTimeout(typingTimer);
-        }
+        stopTyping(); // Cleanup calls stopTyping
       };
     },
-    [setHistory]
+    [setHistory, stopTyping]
   );
+
+  return { stopTyping };
 }

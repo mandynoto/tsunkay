@@ -19,9 +19,11 @@ export default function Home() {
     systemInstructions: process.env.NEXT_PUBLIC_SYSTEM_PROMPT || "",
   });
 
-  useWelcomeMessage(setHistory);
+  const { stopTyping } = useWelcomeMessage(setHistory);
 
   async function handleSubmit(userMessage: string) {
+    stopTyping(); // Stop the welcome message typing
+
     const newUserMessage: Message = {
       role: "user" as MessageRole,
       parts: [{ text: userMessage }],
