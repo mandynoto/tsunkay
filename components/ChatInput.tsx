@@ -3,6 +3,7 @@
 import type { ChangeEvent, KeyboardEvent } from "react";
 
 import { ArrowUp } from "lucide-react";
+import ChatButton from "./ChatButton";
 import { useState } from "react";
 
 interface ChatInputProps {
@@ -48,18 +49,13 @@ export default function ChatInput({ onSend }: ChatInputProps) {
       </div>
 
       {/* Send Button */}
-      <button
-        className={
-          message.trim()
-            ? "btn-icon-primary cursor-pointer"
-            : "btn-icon-disabled"
-        }
+      <ChatButton
         onClick={handleSend}
-        disabled={!message.trim()}
+        isEnabled={!!message.trim()}
         aria-label="Send message"
       >
         <ArrowUp size={20} />
-      </button>
+      </ChatButton>
     </div>
   );
 }
