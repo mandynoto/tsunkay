@@ -1,7 +1,7 @@
 "use client";
 
 import { Message, MessageRole } from "@/lib/types";
-import { useEffect, useState } from "react"; // Added useEffect
+import { useState } from "react";
 
 import { ChatHistory } from "@/lib/types";
 import ChatInput from "@/components/ChatInput";
@@ -9,6 +9,7 @@ import { ChatSettings } from "@/lib/types";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import MessageWindow from "@/components/MessageWindow";
+import { useWelcomeMessage } from "@/lib/hooks/useWelcomeMessage";
 
 export default function Home() {
   const [history, setHistory] = useState<ChatHistory>([]);
@@ -18,52 +19,7 @@ export default function Home() {
     systemInstructions: process.env.NEXT_PUBLIC_SYSTEM_PROMPT || "",
   });
 
-  const [streamedWelcomeMessage, setStreamedWelcomeMessage] =
-    useState<string>("");
-  const [isWelcomeMessageComplete, setIsWelcomeMessageComplete] =
-    useState<boolean>(false);
-
-  const welcomeMessages = ["hey", "wyd", "sup", "hi"];
-
-  useEffect(() => {
-    const randomMessage =
-      welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
-    let index = 0;
-
-    function typeCharacter() {
-      if (index < randomMessage.length) {
-        const charToAdd = randomMessage.charAt(index);
-        console.log(
-          `Adding char: '${charToAdd}' at index ${index}. Current streamed: '${streamedWelcomeMessage}'`
-        );
-        setStreamedWelcomeMessage((prev) => {
-          console.log(
-            `Prev state: '${prev}'. New state: '${prev + charToAdd}'`
-          );
-          return prev + charToAdd;
-        });
-        index++;
-        setTimeout(typeCharacter, 50);
-      } else {
-        setIsWelcomeMessageComplete(true);
-      }
-    }
-
-    typeCharacter();
-
-    return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (isWelcomeMessageComplete && streamedWelcomeMessage) {
-      const welcomeMessageObject: Message = {
-        role: "model" as MessageRole,
-        parts: [{ text: streamedWelcomeMessage }],
-      };
-      setHistory((prevHistory) => [welcomeMessageObject, ...prevHistory]);
-    }
-  }, [isWelcomeMessageComplete, streamedWelcomeMessage]);
+  useWelcomeMessage(setHistory);
 
   async function handleSubmit(userMessage: string) {
     const newUserMessage: Message = {
@@ -132,19 +88,7 @@ export default function Home() {
     <div className="h-screen">
       <Header />
       <main className="h-full flex flex-col">
-        <MessageWindow
-          history={
-            isWelcomeMessageComplete
-              ? history
-              : [
-                  {
-                    role: "model" as MessageRole,
-                    parts: [{ text: streamedWelcomeMessage }],
-                  },
-                  ...history,
-                ]
-          }
-        />
+        <MessageWindow history={history} />
         <div className="max-w-2xl mx-auto w-full">
           <ChatInput onSend={handleSubmit} />
         </div>
