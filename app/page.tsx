@@ -15,7 +15,7 @@ export default function Home() {
   const [settings] = useState<ChatSettings>({
     temperature: 1,
     model: "gemini-2.0-flash",
-    systemInstructions: "you are a helpful assistant",
+    systemInstructions: process.env.NEXT_PUBLIC_SYSTEM_PROMPT || "",
   });
 
   const [streamedWelcomeMessage, setStreamedWelcomeMessage] =
