@@ -1,25 +1,41 @@
 import React from "react";
 
-interface CTAButtonProps extends React.ComponentPropsWithoutRef<"button"> {
+interface CTAButtonProps extends React.ComponentPropsWithoutRef<"a"> {
   isEnabled?: boolean;
+  isFilled?: boolean;
   children: React.ReactNode;
 }
 
 export default function CTAButton({
   isEnabled = true,
+  isFilled = true,
   children,
   className,
   ...props
 }: CTAButtonProps) {
-  const buttonClasses = isEnabled
-    ? "bg-slate-700 text-white px-4 py-2 rounded-lg font-semibold cursor-pointer"
-    : "bg-slate-700 text-white px-4 py-2 rounded-lg opacity-50 cursor-not-allowed";
+  let finalButtonClasses = "px-4 py-2 rounded-lg";
 
-  const finalClasses = `${buttonClasses} ${className || ""}`.trim();
+  if (isFilled) {
+    finalButtonClasses += " " + "bg-slate-700 text-white";
+  } else {
+    finalButtonClasses += " " + "bg-white text-slate-400 drop-shadow-sm";
+  }
+
+  if (isEnabled) {
+    finalButtonClasses += " cursor-pointer";
+  } else {
+    finalButtonClasses += " opacity-50";
+  }
+
+  finalButtonClasses += ` ${className || ""}`;
 
   return (
-    <button disabled={!isEnabled} className={finalClasses} {...props}>
+    <a
+      aria-disabled={!isEnabled}
+      className={finalButtonClasses.trim()}
+      {...props}
+    >
       {children}
-    </button>
+    </a>
   );
 }
