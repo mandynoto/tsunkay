@@ -3,44 +3,69 @@
 import { ChatHistory, Message } from "@/lib/types";
 import { useCallback, useEffect, useRef } from "react";
 
-const welcomeMessages = ["Hey 🙂", "Hi 🙂", "Hello 🙂"];
+const welcomeMessages = ["Hey", "Hi", "Hello"];
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+function delay(ms: number): Promise<void> {
+  return new Promise<void>((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+type SetHistoryFunction = (
+  updater: (prevHistory: ChatHistory) => ChatHistory
+) => void;
+
+interface WelcomeMessageOptions {
+  initialRenderDelay?: number;
+}
+
+interface UseWelcomeMessageReturn {
+  stopTyping: () => void;
+}
 
 export function useWelcomeMessage(
-  setHistory: (updater: (prevHistory: ChatHistory) => ChatHistory) => void,
-  options?: { initialRenderDelay?: number }
-): { stopTyping: () => void } {
-  const isTypingActive = useRef(true);
+  setHistory: SetHistoryFunction,
+  options?: WelcomeMessageOptions
+): UseWelcomeMessageReturn {
+  const isTyping = useRef(true);
   const initialRenderDelay = options?.initialRenderDelay ?? 0;
 
-  const stopTyping = useCallback(function () {
-    isTypingActive.current = false;
+  const stopTyping = useCallback(() => {
+    isTyping.current = false;
   }, []);
 
   useEffect(
     function () {
-      isTypingActive.current = true;
+      isTyping.current = true;
 
-      const typeWelcomeMessage = async () => {
+      async function typeWelcomeMessage() {
         await delay(initialRenderDelay);
-        if (!isTypingActive.current) return;
+
+        if (!isTyping.current) {
+          return;
+        }
 
         const welcomeMessageObject: Message = {
           role: "model",
           parts: [{ text: "" }],
         };
+
         setHistory(() => [welcomeMessageObject]);
 
         await delay(1100);
-        if (!isTypingActive.current) return;
+
+        if (!isTyping.current) {
+          return;
+        }
 
         const randomMessage =
           welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
         let currentText = "";
 
         for (let i = 0; i < randomMessage.length; i++) {
-          if (!isTypingActive.current) return;
+          if (!isTyping.current) {
+            return;
+          }
 
           let charToAdd = randomMessage.charAt(i);
           if (
@@ -72,8 +97,9 @@ export function useWelcomeMessage(
 
           await delay(150);
         }
-        isTypingActive.current = false;
-      };
+
+        isTyping.current = false;
+      }
 
       typeWelcomeMessage();
 
