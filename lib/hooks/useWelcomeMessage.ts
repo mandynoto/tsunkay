@@ -3,89 +3,85 @@
 import { ChatHistory, Message } from "@/lib/types";
 import { useCallback, useEffect, useRef } from "react";
 
-const welcomeMessages = ["Hey 🙂", "Wyd 🙂", "Sup 🙂"];
+const welcomeMessages = ["Hey 🙂", "Hi 🙂", "Hello 🙂"];
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export function useWelcomeMessage(
-  setHistory: (updater: (prevHistory: ChatHistory) => ChatHistory) => void
+  setHistory: (updater: (prevHistory: ChatHistory) => ChatHistory) => void,
+  options?: { initialRenderDelay?: number }
 ): { stopTyping: () => void } {
-  const typingTimers = useRef<NodeJS.Timeout[]>([]);
-  const isTypingActive = useRef(true); // New flag
+  const isTypingActive = useRef(true);
+  const initialRenderDelay = options?.initialRenderDelay ?? 0;
 
   const stopTyping = useCallback(function () {
-    isTypingActive.current = false; // Set flag to false
-    typingTimers.current.forEach(clearTimeout);
-    typingTimers.current = [];
+    isTypingActive.current = false;
   }, []);
 
   useEffect(
     function () {
-      isTypingActive.current = true; // Reset flag on mount
+      isTypingActive.current = true;
 
-      const welcomeMessageObject: Message = {
-        role: "model",
-        parts: [{ text: "" }],
-      };
-      setHistory(function () {
-        return [welcomeMessageObject];
-      });
+      const typeWelcomeMessage = async () => {
+        await delay(initialRenderDelay);
+        if (!isTypingActive.current) return;
 
-      const initialDelayTimer = setTimeout(function () {
+        const welcomeMessageObject: Message = {
+          role: "model",
+          parts: [{ text: "" }],
+        };
+        setHistory(() => [welcomeMessageObject]);
+
+        await delay(1100);
+        if (!isTypingActive.current) return;
+
         const randomMessage =
           welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
-        let index = 0;
+        let currentText = "";
 
-        function typeCharacter() {
-          if (!isTypingActive.current) {
-            return;
-          }
+        for (let i = 0; i < randomMessage.length; i++) {
+          if (!isTypingActive.current) return;
 
-          if (index < randomMessage.length) {
-            let charToAdd = randomMessage.charAt(index);
-            let nextIndex = index + 1;
-
-            // fix emoji being temporarily rendered as question mark before being replaced as an actual emoji
-            // Check if it's the start of a surrogate pair (high surrogate)
-            // and if the next character is a low surrogate.
-            // This indicates a single Unicode code point (like many emojis)
-            // that takes two UTF-16 code units.
+          let charToAdd = randomMessage.charAt(i);
+          if (
+            charToAdd.charCodeAt(0) >= 0xd800 &&
+            charToAdd.charCodeAt(0) <= 0xdbff &&
+            i + 1 < randomMessage.length
+          ) {
+            const nextChar = randomMessage.charAt(i + 1);
             if (
-              charToAdd.charCodeAt(0) >= 0xd800 &&
-              charToAdd.charCodeAt(0) <= 0xdbff && // is high surrogate
-              nextIndex < randomMessage.length &&
-              randomMessage.charCodeAt(nextIndex) >= 0xdc00 &&
-              randomMessage.charCodeAt(nextIndex) <= 0xdfff // is low surrogate
+              nextChar.charCodeAt(0) >= 0xdc00 &&
+              nextChar.charCodeAt(0) <= 0xdfff
             ) {
-              charToAdd += randomMessage.charAt(nextIndex); // Add the low surrogate
-              nextIndex++; // Move past both parts of the emoji
+              charToAdd += nextChar;
+              i++;
             }
-
-            setHistory(function (prevHistory) {
-              const newHistory = [...prevHistory];
-              if (newHistory.length > 0 && newHistory[0].role === "model") {
-                newHistory[0] = {
-                  ...newHistory[0],
-                  parts: [{ text: newHistory[0].parts[0].text + charToAdd }],
-                };
-              }
-              return newHistory;
-            });
-            index = nextIndex; // Update index to skip the second part of the emoji if it was a surrogate pair
-            const typingTimer = setTimeout(typeCharacter, 50);
-            typingTimers.current.push(typingTimer);
-          } else {
-            isTypingActive.current = false; // Typing finished naturally
           }
+
+          currentText += charToAdd;
+          setHistory((prevHistory) => {
+            const newHistory = [...prevHistory];
+            if (newHistory.length > 0 && newHistory[0].role === "model") {
+              newHistory[0] = {
+                ...newHistory[0],
+                parts: [{ text: currentText }],
+              };
+            }
+            return newHistory;
+          });
+
+          await delay(150);
         }
-        typeCharacter();
-      }, 1100);
+        isTypingActive.current = false;
+      };
 
-      typingTimers.current.push(initialDelayTimer);
+      typeWelcomeMessage();
 
-      return function () {
-        stopTyping(); // Cleanup calls stopTyping
+      return () => {
+        stopTyping();
       };
     },
-    [setHistory, stopTyping]
+    [setHistory, stopTyping, initialRenderDelay]
   );
 
   return { stopTyping };

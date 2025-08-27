@@ -19,7 +19,9 @@ export default function Home() {
     systemInstructions: process.env.NEXT_PUBLIC_SYSTEM_PROMPT || "",
   });
 
-  const { stopTyping } = useWelcomeMessage(setHistory);
+  const { stopTyping } = useWelcomeMessage(setHistory, {
+    initialRenderDelay: 300,
+  });
 
   async function handleSubmit(userMessage: string) {
     stopTyping();
