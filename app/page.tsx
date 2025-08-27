@@ -15,7 +15,7 @@ export default function Home() {
   const [history, setHistory] = useState<ChatHistory>([]);
   const [settings] = useState<ChatSettings>({
     temperature: 1,
-    model: "gemini-2.0-flash",
+    model: process.env.NEXT_PUBLIC_MODEL || "gemini-2.0-flash-lite",
     systemInstructions: process.env.NEXT_PUBLIC_SYSTEM_PROMPT || "",
   });
 
