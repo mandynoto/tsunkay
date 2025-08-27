@@ -17,7 +17,7 @@ export default function MessageWindow({ history }: MessageWindowProps) {
   }, [history]);
 
   return (
-    <div className="flex-1 overflow-y-auto p-8 pt-16 h-0">
+    <div className="flex-1 overflow-y-auto pt-0 pb-2 h-0">
       <div className="mx-auto max-w-xl">
         {history.map((msg, index) => (
           <MessageBubble key={index} message={msg} />

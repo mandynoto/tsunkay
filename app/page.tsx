@@ -87,7 +87,7 @@ export default function Home() {
   return (
     <div className="h-screen">
       <Header />
-      <main className="h-full flex flex-col">
+      <main className="h-full flex flex-col pt-20">
         <MessageWindow history={history} />
         <div className="max-w-2xl mx-auto w-full">
           <ChatInput onSend={handleSubmit} />
