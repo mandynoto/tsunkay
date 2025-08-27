@@ -1,6 +1,11 @@
 "use client";
 
-import type { ChangeEvent, KeyboardEvent } from "react";
+import {
+  type ChangeEvent,
+  type KeyboardEvent,
+  useRef,
+  useEffect,
+} from "react";
 
 import { ArrowUp } from "lucide-react";
 import ChatButton from "./ChatButton";
@@ -12,6 +17,22 @@ interface ChatInputProps {
 
 export default function ChatInput({ onSend }: ChatInputProps) {
   const [message, setMessage] = useState("");
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: globalThis.KeyboardEvent) => {
+      if (e.key === "Escape" && e.shiftKey) {
+        e.preventDefault();
+        textAreaRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
@@ -38,6 +59,7 @@ export default function ChatInput({ onSend }: ChatInputProps) {
       {/* Chat Input */}
       <div className="relative mx-2 flex flex-1 items-center">
         <textarea
+          ref={textAreaRef}
           autoFocus
           className="w-full resize-none border-none bg-transparent px-3 py-2 leading-tight focus:outline-none placeholder:text-gray-400 placeholder:font-medium"
           placeholder="Chat"
