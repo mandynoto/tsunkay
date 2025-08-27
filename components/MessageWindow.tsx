@@ -12,7 +12,6 @@ interface MessageWindowProps {
 export default function MessageWindow({ history }: MessageWindowProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to the bottom after ai sends a message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [history]);
@@ -24,7 +23,6 @@ export default function MessageWindow({ history }: MessageWindowProps) {
           <MessageBubble key={index} message={msg} />
         ))}
 
-        {/* Invisible element to help scroll to bottom */}
         <div ref={messagesEndRef} />
       </div>
     </div>
