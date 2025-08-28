@@ -41,11 +41,6 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
         ) : (
           <ReactMarkdown
             components={{
-              p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
-                <p className="my-1" {...props}>
-                  {props.children}
-                </p>
-              ),
               pre: (props: React.HTMLAttributes<HTMLPreElement>) => (
                 <div className="my-3">
                   <pre
