@@ -25,60 +25,59 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
     >
       <span
         className={`
-        inline-block rounded-2xl px-4 py-4 shadow-sm break-words whitespace-pre-wrap
+        inline-block rounded-2xl px-4 py-4 shadow-sm break-words
         ${
-          isUser ? "bg-orange-100 text-black" : "bg-white text-gray-800"
-        } max-w-full
+          isUser
+            ? "bg-orange-100 text-black whitespace-pre-wrap"
+            : "bg-white text-gray-800"
+        }
+        max-w-full
       `}
       >
         {isAIThinking ? (
           "🤔"
         ) : isUser ? (
-          <div className="break-words whitespace-pre-wrap">{textContent}</div>
+          textContent
         ) : (
-          <div className="break-words">
-            <ReactMarkdown
-              components={{
-                p: (props) => (
-                  <p className="my-1" {...props}>
-                    {props.children}
-                  </p>
-                ),
-                pre: (props) => (
-                  <div className="my-2">
-                    <pre
-                      className="bg-gray-100 p-2 rounded overflow-auto"
-                      {...props}
-                    />
-                  </div>
-                ),
-                code: ({ className, children, ...props }: CodeProps) => (
-                  <code
-                    className={`${
-                      props.inline ? "bg-gray-100 px-1 rounded" : "block"
-                    } ${className || ""}`}
-                    {...props}
-                  >
-                    {children}
-                  </code>
-                ),
-                ul: (props) => (
-                  <ul className="my-1 pl-5 list-disc" {...props} />
-                ),
-                ol: (props) => (
-                  <ol className="my-1 pl-5 list-decimal" {...props} />
-                ),
-                a: (props) => (
-                  <a
-                    className="text-blue-600 hover:underline break-all"
+          <ReactMarkdown
+            components={{
+              p: (props) => (
+                <p className="my-1" {...props}>
+                  {props.children}
+                </p>
+              ),
+              pre: (props) => (
+                <div className="my-2">
+                  <pre
+                    className="bg-gray-100 p-2 rounded overflow-auto"
                     {...props}
                   />
-                ),
-              }}
-            >
-              {textContent}
-            </ReactMarkdown>
-          </div>
+                </div>
+              ),
+              code: ({ className, children, ...props }: CodeProps) => (
+                <code
+                  className={`${
+                    props.inline ? "bg-gray-100 px-1 rounded" : "block"
+                  } ${className || ""}`}
+                  {...props}
+                >
+                  {children}
+                </code>
+              ),
+              ul: (props) => <ul className="my-1 pl-5 list-disc" {...props} />,
+              ol: (props) => (
+                <ol className="my-1 pl-5 list-decimal" {...props} />
+              ),
+              a: (props) => (
+                <a
+                  className="text-blue-600 hover:underline break-all"
+                  {...props}
+                />
+              ),
+            }}
+          >
+            {textContent}
+          </ReactMarkdown>
         )}
       </span>
     </div>
