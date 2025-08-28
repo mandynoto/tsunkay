@@ -33,6 +33,8 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
       >
         {isAIThinking ? (
           "🤔"
+        ) : isUser ? (
+          <div className="break-words whitespace-pre-wrap">{textContent}</div>
         ) : (
           <div className="break-words">
             <ReactMarkdown
