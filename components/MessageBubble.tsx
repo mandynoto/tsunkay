@@ -46,9 +46,9 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
                 </p>
               ),
               pre: (props) => (
-                <div className="my-2">
+                <div className="my-3">
                   <pre
-                    className="bg-gray-100 p-2 rounded overflow-auto"
+                    className="bg-gray-100 p-5 rounded-2xl overflow-auto"
                     {...props}
                   />
                 </div>
@@ -56,7 +56,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
               code: ({ className, children, ...props }: CodeProps) => (
                 <code
                   className={`${
-                    props.inline ? "bg-gray-100 px-1 rounded" : "block"
+                    props.inline ? "bg-gray-100 px-2 py-0.5 rounded-md" : "block"
                   } ${className || ""}`}
                   {...props}
                 >
