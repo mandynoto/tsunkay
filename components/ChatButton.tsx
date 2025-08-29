@@ -2,7 +2,7 @@ import React from "react";
 
 interface ChatButtonProps extends React.ComponentPropsWithoutRef<"button"> {
   isEnabled?: boolean;
-  children: React.ReactNode; // For the icon
+  children: React.ReactNode;
 }
 
 export default function ChatButton({
@@ -15,11 +15,7 @@ export default function ChatButton({
     : "bg-slate-100 text-slate-400 p-2 rounded-full";
 
   return (
-    <button
-      disabled={!isEnabled}
-      className={buttonClasses}
-      {...props} // Pass through onClick, aria-label, etc.
-    >
+    <button disabled={!isEnabled} className={buttonClasses} {...props}>
       {children}
     </button>
   );
