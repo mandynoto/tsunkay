@@ -58,43 +58,17 @@ export function useWelcomeMessage(
 
         const randomMessage =
           welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
-        let currentText = "";
 
-        for (let i = 0; i < randomMessage.length; i++) {
-          if (!isTyping.current) {
-            return;
+        setHistory((prevHistory) => {
+          const newHistory = [...prevHistory];
+          if (newHistory.length > 0 && newHistory[0].role === "model") {
+            newHistory[0] = {
+              ...newHistory[0],
+              parts: [{ text: randomMessage }],
+            };
           }
-
-          let charToAdd = randomMessage.charAt(i);
-          if (
-            charToAdd.charCodeAt(0) >= 0xd800 &&
-            charToAdd.charCodeAt(0) <= 0xdbff &&
-            i + 1 < randomMessage.length
-          ) {
-            const nextChar = randomMessage.charAt(i + 1);
-            if (
-              nextChar.charCodeAt(0) >= 0xdc00 &&
-              nextChar.charCodeAt(0) <= 0xdfff
-            ) {
-              charToAdd += nextChar;
-              i++;
-            }
-          }
-
-          currentText += charToAdd;
-          setHistory((prevHistory) => {
-            const newHistory = [...prevHistory];
-            if (newHistory.length > 0 && newHistory[0].role === "model") {
-              newHistory[0] = {
-                ...newHistory[0],
-                parts: [{ text: currentText }],
-              };
-            }
-            return newHistory;
-          });
-
-          await delay(150);
-        }
+          return newHistory;
+        });
 
         isTyping.current = false;
       }
