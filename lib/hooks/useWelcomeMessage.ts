@@ -36,8 +36,6 @@ export function useWelcomeMessage(
 
   useEffect(
     function () {
-      isTyping.current = true;
-
       async function typeWelcomeMessage() {
         await delay(initialRenderDelay);
 
