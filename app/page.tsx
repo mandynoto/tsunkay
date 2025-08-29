@@ -21,6 +21,7 @@ export default function Home() {
 
   const { stopTyping } = useWelcomeMessage(setHistory, {
     initialRenderDelay: 300,
+    thinkingDelay: 1100,
   });
 
   async function handleSubmit(userMessage: string) {

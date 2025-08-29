@@ -17,6 +17,7 @@ type HistorySetter = (
 
 interface UseWelcomeMessageOptions {
   initialRenderDelay?: number;
+  thinkingDelay?: number;
 }
 
 interface UseWelcomeMessageResult {
@@ -29,6 +30,7 @@ export function useWelcomeMessage(
 ): UseWelcomeMessageResult {
   const isTyping = useRef(true);
   const initialRenderDelay = options?.initialRenderDelay ?? 0;
+  const thinkingDelay = options?.thinkingDelay ?? 1100;
 
   const stopTyping = useCallback(() => {
     isTyping.current = false;
@@ -49,7 +51,7 @@ export function useWelcomeMessage(
 
       setHistory(() => [welcomeMessageObject]);
 
-      await delay(1100);
+      await delay(thinkingDelay);
 
       if (!isTyping.current) {
         return;
@@ -77,7 +79,7 @@ export function useWelcomeMessage(
     return () => {
       stopTyping();
     };
-  }, [setHistory, stopTyping, initialRenderDelay]);
+  }, [setHistory, stopTyping, initialRenderDelay, thinkingDelay]);
 
   return { stopTyping };
 }
