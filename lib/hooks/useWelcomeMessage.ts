@@ -34,53 +34,50 @@ export function useWelcomeMessage(
     isTyping.current = false;
   }, []);
 
-  useEffect(
-    function () {
-      async function typeWelcomeMessage() {
-        await delay(initialRenderDelay);
+  useEffect(() => {
+    async function typeWelcomeMessage() {
+      await delay(initialRenderDelay);
 
-        if (!isTyping.current) {
-          return;
-        }
-
-        const welcomeMessageObject: Message = {
-          role: "model",
-          parts: [{ text: "" }],
-        };
-
-        setHistory(() => [welcomeMessageObject]);
-
-        await delay(1100);
-
-        if (!isTyping.current) {
-          return;
-        }
-
-        const randomMessage =
-          welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
-
-        setHistory((prevHistory) => {
-          const newHistory = [...prevHistory];
-          if (newHistory.length > 0 && newHistory[0].role === "model") {
-            newHistory[0] = {
-              ...newHistory[0],
-              parts: [{ text: randomMessage }],
-            };
-          }
-          return newHistory;
-        });
-
-        isTyping.current = false;
+      if (!isTyping.current) {
+        return;
       }
 
-      typeWelcomeMessage();
-
-      return () => {
-        stopTyping();
+      const welcomeMessageObject: Message = {
+        role: "model",
+        parts: [{ text: "" }],
       };
-    },
-    [setHistory, stopTyping, initialRenderDelay]
-  );
+
+      setHistory(() => [welcomeMessageObject]);
+
+      await delay(1100);
+
+      if (!isTyping.current) {
+        return;
+      }
+
+      const randomMessage =
+        welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
+
+      setHistory((prevHistory) => {
+        const newHistory = [...prevHistory];
+        if (newHistory.length > 0 && newHistory[0].role === "model") {
+          newHistory[0] = {
+            ...newHistory[0],
+            parts: [{ text: randomMessage }],
+          };
+        }
+        return newHistory;
+      });
+
+      isTyping.current = false;
+    }
+
+    typeWelcomeMessage();
+
+    return () => {
+      stopTyping();
+    };
+  }, [setHistory, stopTyping, initialRenderDelay]);
 
   return { stopTyping };
 }
