@@ -8,19 +8,16 @@ interface ChatButtonProps extends React.ComponentPropsWithoutRef<"button"> {
 export default function ChatButton({
   isEnabled = true,
   children,
-  className,
   ...props
 }: ChatButtonProps) {
   const buttonClasses = isEnabled
     ? "bg-slate-700 text-white p-2 rounded-full cursor-pointer"
     : "bg-slate-100 text-slate-400 p-2 rounded-full";
 
-  const finalClasses = `${buttonClasses} ${className || ""}`.trim();
-
   return (
     <button
       disabled={!isEnabled}
-      className={finalClasses}
+      className={buttonClasses}
       {...props} // Pass through onClick, aria-label, etc.
     >
       {children}
