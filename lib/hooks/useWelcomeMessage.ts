@@ -16,7 +16,7 @@ type HistorySetter = (
 ) => void;
 
 interface UseWelcomeMessageOptions {
-  initialRenderDelay?: number;
+  initialMessageBubbleRenderDelay?: number;
   thinkingDelay?: number;
 }
 
@@ -29,7 +29,7 @@ export function useWelcomeMessage(
   options?: UseWelcomeMessageOptions
 ): UseWelcomeMessageResult {
   const isTyping = useRef(true);
-  const initialRenderDelay = options?.initialRenderDelay ?? 0;
+  const initialRenderDelay = options?.initialMessageBubbleRenderDelay ?? 0;
   const thinkingDelay = options?.thinkingDelay ?? 1100;
 
   const stopTyping = useCallback(() => {

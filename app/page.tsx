@@ -20,7 +20,7 @@ export default function Home() {
   });
 
   const { stopTyping } = useWelcomeMessage(setHistory, {
-    initialRenderDelay: 300,
+    initialMessageBubbleRenderDelay: 300,
     thinkingDelay: 1100,
   });
 
