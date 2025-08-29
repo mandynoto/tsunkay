@@ -11,22 +11,22 @@ function delay(ms: number): Promise<void> {
   });
 }
 
-type SetHistoryFunction = (
+type HistorySetter = (
   updater: (prevHistory: ChatHistory) => ChatHistory
 ) => void;
 
-interface WelcomeMessageOptions {
+interface UseWelcomeMessageOptions {
   initialRenderDelay?: number;
 }
 
-interface UseWelcomeMessageReturn {
+interface UseWelcomeMessageResult {
   stopTyping: () => void;
 }
 
 export function useWelcomeMessage(
-  setHistory: SetHistoryFunction,
-  options?: WelcomeMessageOptions
-): UseWelcomeMessageReturn {
+  setHistory: HistorySetter,
+  options?: UseWelcomeMessageOptions
+): UseWelcomeMessageResult {
   const isTyping = useRef(true);
   const initialRenderDelay = options?.initialRenderDelay ?? 0;
 
