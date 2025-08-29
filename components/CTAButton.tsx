@@ -13,12 +13,12 @@ export default function CTAButton({
   className,
   ...props
 }: CTAButtonProps) {
-  let finalButtonClasses = "px-4 py-2 rounded-lg";
+  let finalButtonClasses = "px-4 py-2 rounded-full border border-slate-200";
 
   if (isFilled) {
     finalButtonClasses += " " + "bg-slate-700 text-white";
   } else {
-    finalButtonClasses += " " + "bg-white text-slate-400 drop-shadow-sm";
+    finalButtonClasses += " " + "text-slate-600";
   }
 
   if (isEnabled) {

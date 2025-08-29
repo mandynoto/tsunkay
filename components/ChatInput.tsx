@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  type ChangeEvent,
-  type KeyboardEvent,
-  useRef,
-  useEffect,
-} from "react";
+import { type ChangeEvent, type KeyboardEvent, useRef, useEffect } from "react";
 
 import { ArrowUp } from "lucide-react";
 import ChatButton from "./ChatButton";
@@ -54,7 +49,7 @@ export default function ChatInput({ onSend }: ChatInputProps) {
 
   return (
     <div
-      className={`mx-4 flex items-center rounded-full border border-black/5 bg-white p-3 shadow-sm`}
+      className={`mx-4 flex items-center rounded-full border border-slate-200 bg-white p-3`}
     >
       {/* Chat Input */}
       <div className="relative mx-2 flex flex-1 items-center">

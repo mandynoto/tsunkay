@@ -26,12 +26,8 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
     >
       <span
         className={`
-        leading-8 inline-block rounded-2xl px-4 py-4 shadow-sm break-words max-w-full
-        ${
-          isUser
-            ? "bg-orange-100 text-black whitespace-pre-wrap"
-            : "bg-white text-gray-800"
-        }
+        leading-8 inline-block rounded-2xl px-4 py-4  break-words max-w-full 
+        ${isUser ? "bg-orange-100  whitespace-pre-wrap" : "bg-white "}
       `}
       >
         {isAIThinking ? (
