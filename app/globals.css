@@ -6,7 +6,7 @@ body,
 #__next {
   background-color: #fdfdfd;
   min-height: 100vh;
-  font-family: "Fuzzy Bubbles", cursive;
+  font-family: "Fuzzy Bubbles", cursive, sans-serif;
 }
 
 /* Custom Scrollbar Styles */
