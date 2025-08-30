@@ -3,7 +3,11 @@
 import { ChatHistory, Message } from "@/lib/types";
 import { useCallback, useEffect, useRef } from "react";
 
-const welcomeMessages = ["Hey", "Hi", "Hello"];
+const welcomeMessages = [
+  "Hey let's play a game. Guess what animal I am. You can ask for hints!",
+  "Can you guess what animal I am? Feel free to ask for hints!",
+  "Wanna play a game? Guess what animal I am? Use hints if you need them!",
+];
 
 function delay(ms: number): Promise<void> {
   return new Promise<void>((resolve) => {
