@@ -46,7 +46,7 @@ export async function chatToGeminiStreamed(
   userMessage: string,
   history: ChatHistory,
   settings: ChatSettings
-): Promise<AsyncGenerator<GenerateContentResponse, any, unknown>> {
+): Promise<AsyncGenerator<GenerateContentResponse, unknown, unknown>> {
   const chatSession = ai.chats.create({
     model: settings.model || "gemini-2.0-flash",
     config: {
