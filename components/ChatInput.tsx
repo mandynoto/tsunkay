@@ -2,7 +2,7 @@
 
 import { type ChangeEvent, type KeyboardEvent, useRef, useEffect } from "react";
 
-import { ArrowUp } from "lucide-react";
+import { VscArrowSmallUp } from "react-icons/vsc";
 import ChatButton from "./ChatButton";
 import { useState } from "react";
 
@@ -71,7 +71,7 @@ export default function ChatInput({ onSend }: ChatInputProps) {
         isEnabled={!!message.trim()}
         aria-label="Send message"
       >
-        <ArrowUp size={20} />
+        <VscArrowSmallUp size={20} />
       </ChatButton>
     </div>
   );

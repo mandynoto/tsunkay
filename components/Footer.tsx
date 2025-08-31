@@ -12,7 +12,7 @@ export default function Footer() {
         rel="noopener noreferrer"
         className="flex items-center text-gray-400 absolute right-6"
       >
-        <VscGithubAlt size={16} />
+        <VscGithubAlt size={12} />
       </a>
     </footer>
   );
