@@ -37,6 +37,7 @@ export default function ChatInput({ onSend }: ChatInputProps) {
     if (message.trim()) {
       onSend(message.trim());
       setMessage("");
+      textAreaRef.current?.focus();
     }
   };
 
