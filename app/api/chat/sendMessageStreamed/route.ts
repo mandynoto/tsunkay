@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { chatToGeminiStreamed } from "@/lib/utils/geminiHelper";
 import { isValidChatRequest } from "@/lib/guards";
 
-export async function POST(request: Request) {
+export async function POST(request: Request): Promise<Response> {
   try {
     const body = await request.json();
 
@@ -18,7 +18,11 @@ export async function POST(request: Request) {
     const encoder = new TextEncoder();
     const readableStream = new ReadableStream({
       async start(controller) {
-        const stream = await chatToGeminiStreamed(userMessage, history, settings);
+        const stream = await chatToGeminiStreamed(
+          userMessage,
+          history,
+          settings
+        );
         for await (const chunk of stream) {
           if (chunk.text) {
             controller.enqueue(encoder.encode(chunk.text));
@@ -32,7 +36,7 @@ export async function POST(request: Request) {
       headers: {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache, no-transform",
-        "Connection": "keep-alive",
+        Connection: "keep-alive",
       },
     });
   } catch (error) {
