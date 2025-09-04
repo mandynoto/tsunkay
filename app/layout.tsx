@@ -1,13 +1,6 @@
 import "./globals.css";
 
-import { Bruno_Ace } from "next/font/google";
 import type { Metadata } from "next";
-
-const brunoAce = Bruno_Ace({
-  variable: "--font-bruno-ace",
-  subsets: ["latin"],
-  weight: "400",
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${brunoAce.variable} antialiased`}>{children}</body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
