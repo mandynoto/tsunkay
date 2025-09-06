@@ -1,5 +1,10 @@
 import ChatInterface from "@/components/ChatInterface";
 
+export const metadata = {
+  title: "Tsunkay",
+  description: "Outsmart an AI Chatbot in 'Guess the Animal'",
+};
+
 const welcomeMessages = [
   "🙂 Hey let's play 'Guess what animal I am?' You get 10 hints",
   "🙂 Hi, we're playing 'Guess what animal I am?' 10 hints and we're done",
