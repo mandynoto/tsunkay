@@ -2,7 +2,7 @@
 
 # Tsunkay
 
-Outsmart an [AI Chatbot](https://tsunkay.vercel.app/) in 'Guess the Animal'
+Guess the Secret Animal with an [AI Chatbot](https://tsunkay.vercel.app/)
 
 </div>
 
