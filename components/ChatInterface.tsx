@@ -7,6 +7,7 @@ import ChatInput from "@/components/ChatInput";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import MessageWindow from "@/components/MessageWindow";
+import { systemPrompt } from "@/lib/systemPrompt";
 import { useState } from "react";
 
 interface ChatInterfaceProps {
@@ -20,7 +21,7 @@ export default function ChatInterface({ welcomeMessage }: ChatInterfaceProps) {
   const [settings] = useState<ChatSettings>({
     temperature: 1,
     model: process.env.NEXT_PUBLIC_MODEL || "gemini-2.0-flash-lite",
-    systemInstructions: process.env.NEXT_PUBLIC_SYSTEM_PROMPT || "",
+    systemInstructions: systemPrompt,
   });
 
   async function handleSubmit(userMessage: string) {
