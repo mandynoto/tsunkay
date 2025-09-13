@@ -6,9 +6,9 @@ export const metadata = {
 };
 
 const welcomeMessages: string[] = [
-  "🙂 Hey let's play 'Guess what animal I am?' You get 10 hints",
-  "🙂 Hi, we're playing 'Guess what animal I am?' 10 hints and we're done",
-  "🙂 Hello, let's play 'Guess what animal I am?' I give you 10 hints",
+  "🙂 Hi. I'm thinking of a secret animal. Guess what it is! I can give you up to 10 hints.",
+  "🙂 Hey. I'm thinking of a secret animal. Guess what it is! I can give you up to 10 hints.",
+  "🙂 Hello. I'm thinking of a secret animal. Guess what it is! I can give you up to 10 hints.",
 ];
 
 function getRandomWelcomeMessage(): string {
