@@ -66,6 +66,8 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
               a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
                 <a
                   className="text-blue-600 hover:underline break-all"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   {...props}
                 />
               ),
