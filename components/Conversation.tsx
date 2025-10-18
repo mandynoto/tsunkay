@@ -5,11 +5,11 @@ import { useEffect, useRef } from "react";
 import { ChatHistory } from "@/lib/types";
 import MessageBubble from "./MessageBubble";
 
-interface MessageWindowProps {
+interface ConversationProps {
   history: ChatHistory;
 }
 
-export default function MessageWindow({ history }: MessageWindowProps) {
+export default function Conversation({ history }: ConversationProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

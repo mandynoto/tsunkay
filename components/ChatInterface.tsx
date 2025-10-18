@@ -6,7 +6,7 @@ import { Message, MessageRole } from "@/lib/types";
 import ChatInput from "@/components/ChatInput";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import MessageWindow from "@/components/MessageWindow";
+import Conversation from "@/components/Conversation";
 import { systemPrompt } from "@/lib/systemPrompt";
 import { useState } from "react";
 
@@ -87,7 +87,7 @@ export default function ChatInterface({ welcomeMessage }: ChatInterfaceProps) {
     <div className="h-screen">
       <main className="h-full flex flex-col">
         <Header />
-        <MessageWindow history={history} />
+        <Conversation history={history} />
         <div className="max-w-2xl mx-auto w-full">
           <ChatInput onSend={handleSubmit} />
         </div>
