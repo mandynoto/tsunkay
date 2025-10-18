@@ -1,5 +1,7 @@
 import ChatInterface from "@/components/ChatInterface";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Tsunkay",
   description: "Outsmart an AI Chatbot in 'Guess the Animal'",
