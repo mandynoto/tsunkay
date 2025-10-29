@@ -58,7 +58,7 @@ export default function ChatInput({ onSend }: ChatInputProps) {
           ref={textAreaRef}
           autoFocus
           className="w-full resize-none border-none bg-transparent px-3 py-2 leading-tight focus:outline-none placeholder:text-gray-400 placeholder:font-medium"
-          placeholder="Chat"
+          placeholder="Reply to Tsunkay"
           value={message}
           onChange={handleChange}
           onKeyDown={handleKeyPress}
